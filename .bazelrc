@@ -1,0 +1,8 @@
+# Use Bazelmod
+common --enable_bzlmod
+
+# MapBox requires .netrc authentication to download their SDK.
+common --credential_helper=*.mapbox.com=%workspace%/scripts/netrc_credential_helper/netrc_credential_helper.py
+
+# Bazel Symlink Prefix
+build --symlink_prefix=.bazel/

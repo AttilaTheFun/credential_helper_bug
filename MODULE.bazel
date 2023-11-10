@@ -1,0 +1,25 @@
+"""
+Bazel Modules
+"""
+
+# module
+
+module(
+    name = "credential_helper_bug_consumer",
+    version = "0.0.0",
+)
+
+# bazel_skylib
+
+bazel_dep(name = "bazel_skylib", version = "1.4.2")
+
+# mapbox
+
+mapbox_extension = use_extension(
+    "//extensions/mapbox:extension.bzl",
+    "mapbox_extension",
+)
+use_repo(
+    mapbox_extension,
+    "mapbox",
+)
