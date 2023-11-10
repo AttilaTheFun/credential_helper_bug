@@ -1,2 +1,5 @@
+# System files:
+.DS_STORE
+
+# Bazel Files
 .bazel
-.DS_Store
