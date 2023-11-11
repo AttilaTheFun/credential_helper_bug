@@ -14,7 +14,7 @@ class Response:
         self.headers = headers
 
 def main():
-    exit(1)
+    # sys.exit("credential helper error")
 
     # Read the command:
     command = input()
@@ -28,28 +28,28 @@ def main():
     u = urlparse(req.uri)
 
     # Get the home directory:
-    homedir = os.path.expanduser("~")
+    # homedir = os.path.expanduser("~")
 
     # Load the .netrc file:
-    try:
-        n = netrc.netrc(os.path.join(homedir, "Developer", "Bazel", "credentials", ".netrc"))
-    except (FileNotFoundError, netrc.NetrcParseError) as err:
-        raise err
+    # try:
+    #     n = netrc.netrc(os.path.join(homedir, "Developer", "Bazel", "credentials", ".netrc"))
+    # except (FileNotFoundError, netrc.NetrcParseError) as err:
+    #     raise err
 
     # Find the credentials:
-    host = None
-    login = None
-    password = None
-    for host in n.hosts:
-        login, _, password = n.authenticators(host)
-        if host == u.netloc:
-            break
-    if login is None or password is None:
-        raise ValueError(".netrc missing login or password")
+    # login = None
+    # password = None
+    # for host in n.hosts:
+    #     login, _, password = n.authenticators(host)
+    #     if host == u.netloc:
+    #         break
+    # if login is None or password is None:
+    #     raise ValueError(".netrc missing login or password")
 
     # Create the response:
-    header_value_string = f"{login}:{password}"
-    header_value = base64.b64encode(header_value_string.encode()).decode()
+    # header_value_string = f"{login}:{password}"
+    # header_value = base64.b64encode(header_value_string.encode()).decode()
+    header_value = "YOUR TOKEN HERE"
     header_values = [header_value]
     res = Response({"Basic": header_values})
 
