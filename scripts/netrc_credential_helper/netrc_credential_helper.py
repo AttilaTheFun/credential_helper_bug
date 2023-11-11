@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import sys
 import json
 import base64
@@ -14,10 +16,11 @@ class Response:
         self.headers = headers
 
 def main():
-    # sys.exit("credential helper error")
 
     # Read the command:
-    command = input()
+    if len(sys.argv) < 2:
+        raise ValueError("missing command")
+    command = sys.argv[1]
     command = command.strip()
     if command != "get":
         raise ValueError("invalid command: " + command + "\nallowed commands: get")
@@ -28,30 +31,30 @@ def main():
     u = urlparse(req.uri)
 
     # Get the home directory:
-    # homedir = os.path.expanduser("~")
+    homedir = os.path.expanduser("~")
 
     # Load the .netrc file:
-    # try:
-    #     n = netrc.netrc(os.path.join(homedir, "Developer", "Bazel", "credentials", ".netrc"))
-    # except (FileNotFoundError, netrc.NetrcParseError) as err:
-    #     raise err
+    try:
+        n = netrc.netrc(os.path.join(homedir, "Developer", "Bazel", "credentials", ".netrc"))
+    except (FileNotFoundError, netrc.NetrcParseError) as err:
+        raise err
 
     # Find the credentials:
-    # login = None
-    # password = None
-    # for host in n.hosts:
-    #     login, _, password = n.authenticators(host)
-    #     if host == u.netloc:
-    #         break
-    # if login is None or password is None:
-    #     raise ValueError(".netrc missing login or password")
+    host = None
+    login = None
+    password = None
+    for host in n.hosts:
+        login, _, password = n.authenticators(host)
+        if host == u.netloc:
+            break
+    if login is None or password is None:
+        raise ValueError(".netrc missing login or password")
 
     # Create the response:
-    # header_value_string = f"{login}:{password}"
-    # header_value = base64.b64encode(header_value_string.encode()).decode()
-    header_value = "YOUR TOKEN HERE"
+    header_value_string = f"{login}:{password}"
+    header_value = "Basic " + base64.b64encode(header_value_string.encode()).decode()
     header_values = [header_value]
-    res = Response({"Basic": header_values})
+    res = Response({"Authorization": header_values})
 
     # Encode the response:
     response_json = json.dumps(res.__dict__)
